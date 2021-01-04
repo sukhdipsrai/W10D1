@@ -15,7 +15,7 @@
   \************************************/
 /***/ ((module) => {
 
-eval("class DOMNodeCollection {\n    constructor(NodeList) {\n        this.NodeList = NodeList;\n    }\n\n    \n\n}\n\n\n\n\nmodule.exports = DOMNodeCollection;\n\n//# sourceURL=webpack:///./src/dom_node_collection.js?");
+eval("class DOMNodeCollection {\n    constructor(NodeList) {\n        this.NodeList = NodeList;\n    }\n\n    html(string){\n        if(string === \"undefined\") {\n            return this.NodeList[0].innerHTML;\n        }\n        else{\n            this.NodeList.forEach(ele => ele.innerHTML = string);\n        }\n    }\n\n    empty(){\n        this.html(\"\");\n    }\n\n    append(arg){\n        let domNode;\n        if( arg instanceof DOMNodeCollection){\n            domNode = arg;\n        }\n        else if (arg instanceof HTMLElement){\n            domNode = new DOMNodeCollection([arg])\n        }\n        else if(typeof arg === 'string'){\n            // let NodeList = document.querySelectorAll(arg);\n            // make a node list with blank HTMLElements\n            let NodeList = document.createElement(arg).innerHTML = \"Hello World\";\n            NodeList = Array.from(NodeList);\n            domNode = new DOMNodeCollection(NodeList);\n        }\n        debugger;\n        this.NodeList.forEach( function(inner){\n                domNode.NodeList.forEach(  function(outer){\n                    inner.innerHTML += outer.outerHTML;\n                });\n        });\n\n    }\n}\n\n\n\n\nmodule.exports = DOMNodeCollection;\n\n//# sourceURL=webpack:///./src/dom_node_collection.js?");
 
 /***/ })
 
@@ -49,7 +49,7 @@ eval("class DOMNodeCollection {\n    constructor(NodeList) {\n        this.NodeL
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-eval("// Same as below\n// function $l(arg){\n// }\n// window.$l = $l;\n\nconst DOMNodeCollection = __webpack_require__(/*! ./dom_node_collection */ \"./src/dom_node_collection.js\");\n\nwindow.DOMNodeCollection = DOMNodeCollection;\n\nwindow.$l = function (arg){\n    if(arg instanceof HTMLElement) {\n        let NodeList = [arg]\n        return new DOMNodeCollection(NodeList);\n    } else if( typeof arg === 'string' ){\n        // do something, expect CSS selector\n        let NodeList = document.querySelectorAll(arg);\n        NodeList = Array.from(NodeList);\n        return new DOMNodeCollection(NodeList);\n    }\n}\n\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("// Same as below\n// function $l(arg){\n// }\n// window.$l = $l;\n\nconst DOMNodeCollection = __webpack_require__(/*! ./dom_node_collection */ \"./src/dom_node_collection.js\");\n\nwindow.DOMNodeCollection = DOMNodeCollection;\n\nwindow.$l = function (arg){\n    // move if instance of html inside if arg is string\n\n\n    if(arg instanceof HTMLElement) {\n        let NodeList = [arg]\n        return new DOMNodeCollection(NodeList);\n    }\n    else if( typeof arg === 'string' ){    \n        // $l(\"<div> </div>\") parse for html tags -> create elements -> line 16\n\n         // do something, expect CSS selector\n        let NodeList = document.querySelectorAll(arg);\n        NodeList = Array.from(NodeList);\n        return new DOMNodeCollection(NodeList);\n    }\n}\n\n\n//# sourceURL=webpack:///./src/index.js?");
 })();
 
 /******/ })()
